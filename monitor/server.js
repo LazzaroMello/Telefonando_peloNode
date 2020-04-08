@@ -97,8 +97,8 @@ setInterval(()=>{
 					notification.status = 'success';
 
 				}
-				if(response.data.resposta == '1'){
-					
+				if(!response.data.resposta){
+						// code
 				}
 			})
 		}
