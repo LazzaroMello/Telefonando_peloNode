@@ -2,6 +2,14 @@ const axios = require('axios');
 const TotalVoice = require('totalvoice-node');
 const token = process.env.TOTALVOICE_API_KEY
 const client = new TotalVoice(token);
+
+//prox passo REFATORAR Código
+
+const boss = {
+	name:'bossName',
+	telephone:process.env.BOSS_TELEPHONE_NUMBER
+}
+
 const servers = [
 
 	{
@@ -69,12 +77,23 @@ setInterval(()=>{
 			client.tts.buscar(notification.id).then((response)=>{
 				if(response.data.resposta == '1'){
 					console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e vai fazer alguma coisa!`);
-
+					
+					const message = `o ${notification.server.name} está fora do ar,O desenvolvedor ${notification.server.developer.name} já foi avisado e vai fazer alguma coisa!`
+					const options = {
+						velocidade: 2,
+						tipo_voz: 'br-Ricardo',
+ 					}
+					client.tts.enviar(boss.telephone, message, options)
 					notification.status = 'success';
 				}
-				if(response.data.resposta == '1'){
+				if(response.data.resposta == '0'){
 					console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e não pode fazer nada!`);
-
+					const message = `o ${notification.server.name} está fora do ar,O desenvolvedor ${notification.server.developer.name} já foi avisado e não pode fazer nada no momento!`
+					const options = {
+						velocidade: 2,
+						tipo_voz: 'br-Ricardo',
+ 					}
+					client.tts.enviar(boss.telephone, message, options)
 					notification.status = 'success';
 
 				}
