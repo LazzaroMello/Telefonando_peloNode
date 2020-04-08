@@ -2,7 +2,6 @@
 <ul>
   <li>Axios</li>
   <li>TotalVoice</li>
-  functionality
  </ul>
  
 to run the project, type in terminal:
