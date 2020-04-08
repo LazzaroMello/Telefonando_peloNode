@@ -22,6 +22,7 @@ const servers = [
 	}
 ];
 
+const notifications = []
 
 (async function () {
 
@@ -44,8 +45,13 @@ const servers = [
 					tipo_voz: 'br-Vitoria',
 					resposta_usuario: true
 				}
-				client.tts.enviar(server.developer.telephone, message, options).then(() => {
+				client.tts.enviar(server.developer.telephone, message, options).then((response) => {
 					console.log(`O desenvolvedor ${server.developer.name} já foi avisado!`);
+				    notifications.push({
+						id:response.data.id,
+						server,
+						status:'pending'
+					})
 				})
 
 			})
@@ -56,3 +62,26 @@ const servers = [
 	}
 	console.log('Finalizando monitoramento dos servidores!');
 })();
+
+setInterval(()=>{
+	for(let notification of notifications){
+		if(notification.status=='pending'){
+			client.tts.buscar(notification.id).then((response)=>{
+				if(response.data.resposta == '1'){
+					console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e vai fazer alguma coisa!`);
+
+					notification.status = 'success';
+				}
+				if(response.data.resposta == '1'){
+					console.log(`O desenvolvedor ${notification.server.developer.name} já foi avisado e não pode fazer nada!`);
+
+					notification.status = 'success';
+
+				}
+				if(response.data.resposta == '1'){
+					
+				}
+			})
+		}
+	}
+})
